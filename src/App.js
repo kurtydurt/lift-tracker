@@ -42,6 +42,7 @@ function Workouts() {
     }
 
     async function deleteWorkout(workout_id){
+        deleteSelectedExercises(workout_id);
         const { error } = await supabase
             .from('workouts')
             .delete()
@@ -59,6 +60,17 @@ function Workouts() {
             .select("*")
             .eq('workout_id', workout_id)
         setSelectedExercises(exercises);
+        if (error) {
+            console.error('Error posting data:', error);
+        }
+    }
+
+    async function deleteSelectedExercises(workout_id) {
+        setSelectedId({id: 0, name:''});
+        const { error } = await supabase
+            .from('exercises')
+            .delete()
+            .eq('workout_id', workout_id)
         if (error) {
             console.error('Error posting data:', error);
         }
